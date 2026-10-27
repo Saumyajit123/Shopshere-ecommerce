@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en" data-bs-theme="light">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Addresses · ShopSphere</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+
+<body><%- include("../partials/navbar") %><%- include("../partials/alerts") %>
+            <main class="container py-5">
+                <div class="page-heading"><span class="eyebrow">DELIVERY DETAILS</span>
+                    <h1>Your addresses</h1>
+                    <p>Add and manage the places you love to receive your orders.</p>
+                </div>
+                <div class="row g-4">
+                    <div class="col-lg-7">
+                        <div class="row g-3">
+                            <% if(!addresses.length){ %>
+                                <div class="col-12">
+                                    <div class="surface-card empty-state">
+                                        <div class="empty-icon">⌂</div>
+                                        <h3>No addresses saved</h3>
+                                        <p>Add a delivery address to continue checkout.</p>
+                                    </div>
+                                </div>
+                                <% } addresses.forEach(a=>{ %><div class="col-md-6">
+                                        <div class="surface-card address-card">
+                                            <div class="d-flex justify-content-between">
+                                                <h5>
+                                                    <%= a.name %>
+                                                </h5>
+                                                <% if(a.isDefault){ %><span
+                                                        class="badge text-bg-dark rounded-pill">Default</span>
+                                                    <% } %>
+                                            </div>
+                                            <p class="text-secondary mb-1">
+                                                <%= a.phone %>
+                                            </p>
+                                            <p class="mb-3">
+                                                <%= a.addressLine1 %>
+                                                    <% if(a.addressLine2){ %>, <%= a.addressLine2 %>
+                                                            <% } %><br>
+                                                                <%= a.city %>, <%= a.state %>
+                                                                        <%= a.postalCode %><br>
+                                                                            <%= a.country %>
+                                            </p>
+                                            <form method="POST" action="/ui"><input type="hidden" name="action"
+                                                    value="delete-address"><input type="hidden" name="id"
+                                                    value="<%= a.id %>"><button
+                                                    class="btn btn-outline-danger btn-sm rounded-pill">Delete</button>
+                                            </form>
+                                            <% if(cart && cart.items && cart.items.length){ %>
+                                                <form method="POST" action="/ui" class="mt-3"><input type="hidden"
+                                                        name="action" value="checkout"><input type="hidden"
+                                                        name="addressId" value="<%= a.id %>"><button
+                                                        class="btn btn-dark btn-sm rounded-pill">Deliver here</button>
+                                                </form>
+                                                <% } %>
+                                        </div>
+                                    </div>
+                                    <% }) %>
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="surface-card">
+                            <h4 class="mb-4">Add an address</h4>
+                            <form method="POST" action="/ui" class="row g-3"><input type="hidden" name="action"
+                                    value="create-address">
+                                <div class="col-12"><label class="form-label">Full name</label><input
+                                        class="form-control" name="name" required></div>
+                                <div class="col-12"><label class="form-label">Phone</label><input class="form-control"
+                                        name="phone" required></div>
+                                <div class="col-12"><label class="form-label">Address line 1</label><input
+                                        class="form-control" name="addressLine1" required></div>
+                                <div class="col-12"><label class="form-label">Address line 2 (optional)</label><input
+                                        class="form-control" name="addressLine2"></div>
+                                <div class="col-md-6"><label class="form-label">City</label><input class="form-control"
+                                        name="city" required></div>
+                                <div class="col-md-6"><label class="form-label">State</label><input class="form-control"
+                                        name="state" required></div>
+                                <div class="col-md-6"><label class="form-label">Postal code</label><input
+                                        class="form-control" name="postalCode" required></div>
+                                <div class="col-md-6"><label class="form-label">Country</label><input
+                                        class="form-control" name="country" value="India" required></div>
+                                <div class="col-12 form-check ms-2"><input class="form-check-input" type="checkbox"
+                                        name="isDefault" id="isDefault"><label class="form-check-label"
+                                        for="isDefault">Set as default address</label></div>
+                                <div class="col-12"><button class="btn btn-dark rounded-pill px-4">Save address</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </main><%- include("../partials/footer") %></body>
+
+</html>

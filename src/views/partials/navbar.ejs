@@ -1,0 +1,205 @@
+<nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom sticky-top">
+    <div class="container">
+
+        <!-- Brand -->
+        <a class="navbar-brand fw-bold" href="/ui?action=landing">
+            Shop<span class="text-primary">Sphere</span>
+        </a>
+
+        <!-- Mobile Toggle -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
+            aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Navbar Content -->
+        <div class="collapse navbar-collapse" id="mainNavbar">
+
+            <!-- Left Navigation -->
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                <!-- Home -->
+                <li class="nav-item">
+                    <a class="nav-link" href="/ui?action=landing">
+                        Home
+                    </a>
+                </li>
+
+                <!-- Products -->
+                <li class="nav-item">
+                    <a class="nav-link" href="/ui?action=products">
+                        Products
+                    </a>
+                </li>
+
+                <% if (currentUser) { %>
+
+                    <!-- ================= CUSTOMER ================= -->
+
+                    <% if ( currentUser.role==="user" || currentUser.role==="customer" ) { %>
+
+                        <!-- Customer Dashboard -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="/ui?action=dashboard">
+                                Dashboard
+                            </a>
+                        </li>
+
+                        <!-- My Orders -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="/ui?action=orders">
+                                My Orders
+                            </a>
+                        </li>
+
+                        <% } %>
+
+
+                            <!-- ================= ADMIN ================= -->
+
+                            <% if (currentUser.role==="admin" ) { %>
+
+                                <!-- Admin Dashboard -->
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/ui?action=admin-dashboard">
+                                        Admin Dashboard
+                                    </a>
+                                </li>
+
+                                <!-- Product Management -->
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/ui?action=admin-products">
+                                        Manage Products
+                                    </a>
+                                </li>
+
+                                <% } %>
+
+                                    <% } %>
+
+            </ul>
+
+
+            <!-- Right Navigation -->
+            <div class="d-flex align-items-center gap-2">
+
+                <!-- Theme Toggle -->
+                <button id="themeToggle" type="button" class="btn btn-outline-secondary btn-sm" title="Toggle theme">
+                    🌙
+                </button>
+
+
+                <% if (!currentUser) { %>
+
+                    <!-- Guest -->
+                    <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal"
+                        data-bs-target="#loginModal">
+                        Login
+                    </button>
+
+                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                        data-bs-target="#registerModal">
+                        Register
+                    </button>
+
+                    <% } else { %>
+
+                        <!-- User Profile -->
+                        <div class="dropdown">
+
+                            <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+
+                                <% if (currentUser.image) { %>
+
+                                    <img src="<%= currentUser.image %>" alt="Profile" width="28" height="28"
+                                        class="rounded-circle me-1" style="object-fit: cover;">
+
+                                    <% } %>
+
+                                        <%= currentUser.name %>
+
+                            </button>
+
+
+                            <ul class="dropdown-menu dropdown-menu-end">
+
+                                <!-- User Information -->
+                                <li>
+                                    <span class="dropdown-item-text">
+                                        <strong>
+                                            <%= currentUser.name %>
+                                        </strong>
+                                        <br>
+                                        <small class="text-body-secondary">
+                                            <%= currentUser.email %>
+                                        </small>
+                                    </span>
+                                </li>
+
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+
+
+                                <% if ( currentUser.role==="user" || currentUser.role==="customer" ) { %>
+
+                                    <li>
+                                        <a class="dropdown-item" href="/ui?action=dashboard">
+                                            Dashboard
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a class="dropdown-item" href="/ui?action=orders">
+                                            My Orders
+                                        </a>
+                                    </li>
+
+                                    <% } %>
+
+
+                                        <% if (currentUser.role==="admin" ) { %>
+
+                                            <li>
+                                                <a class="dropdown-item" href="/ui?action=admin-dashboard">
+                                                    Admin Dashboard
+                                                </a>
+                                            </li>
+
+                                            <li>
+                                                <a class="dropdown-item" href="/ui?action=admin-products">
+                                                    Manage Products
+                                                </a>
+                                            </li>
+
+                                            <% } %>
+
+
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
+
+
+                                                <!-- Logout -->
+                                                <li>
+                                                    <form method="POST" action="/ui" class="m-0">
+                                                        <input type="hidden" name="action" value="logout">
+
+                                                        <button type="submit" class="dropdown-item text-danger">
+                                                            Logout
+                                                        </button>
+                                                    </form>
+                                                </li>
+
+                            </ul>
+
+                        </div>
+
+                        <% } %>
+
+            </div>
+
+        </div>
+    </div>
+</nav>
